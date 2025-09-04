@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Bro!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #ecf0f1;
+            --card-bg-color: #ffffff;
+            --text-color: #333;
+            --border-radius: 15px;
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header {
+            background-color: var(--card-bg-color);
+            padding: 30px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        .hint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 250px;
+        }
+
+        .card:not(.revealed):hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card.revealed {
+            cursor: default;
+        }
+
+        .card-inner {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .card-inner img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+        }
+
+        .card-inner p {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .card-number {
+            font-size: 4em;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .reveal-message {
+            display: none;
+            background-color: #27ae60;
+            color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            animation: slideInUp 1s ease-in-out;
+            margin-top: 20px;
+        }
+
+        .reveal-message h2 {
+            font-size: 2.5em;
+            margin: 0 0 10px 0;
+        }
+
+        .reveal-message h3 {
+            font-size: 1.5em;
+            margin: 0 0 20px 0;
+        }
+
+        .ticket-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: 2px solid white;
+            border-radius: 50px;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .ticket-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Confetti Effect */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999;
+        }
+        .confetti {
+            width: 10px;
+            height: 10px;
+            background-color: #e74c3c;
+            position: absolute;
+            animation: fall 3s linear forwards;
+            opacity: 0;
+            border-radius: 50%;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Happy Birthday, Bro! 🎉</h1>
+            <p class="subtitle">12. September – Zeit für dein Geschenk! Click dich durch die Boxen...</p>
+        </div>
+
+        <div class="hint-grid">
+            <div class="card" data-hint="1">
+                <div class="card-inner hidden">
+                    <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHRnbDg5MnZlNzBuNXk4MjMxb3dzc3ZmeG1wNmJuam5pc2Yxbzl6eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/RjpE964WUAE5a/giphy.gif" alt="Cleaning room GIF">
+                    <p>Räum mal auf du Schwein</p>
+                </div>
+                <div class="card-number">1</div>
+            </div>
+            
+            <div class="card" data-hint="2">
+                <div class="card-inner hidden">
+                    <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXZuN2hwdXZrYWQ2amx2MHlmcmNvNTljMjl2bHJ1eW1sYmNtdjRoMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/poPz9jfVYTbDW/giphy.gif" alt="Dragon Ball Z dragon GIF">
+                    <p>Without the balls though...</p>
+                </div>
+                <div class="card-number">2</div>
+            </div>
+            
+            <div class="card" data-hint="3">
+                <div class="card-inner hidden">
+                    <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmRvaXUza3Q4aXljbGJidWVraDRldmxyZms2c3ZrMmpjampmd3RjYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fwECKD4RMgH1aAkVcD/giphy.gif" alt="Meerkat standing straight GIF">
+                    <p>Steh mal auf du Fischkopf</p>
+                </div>
+                <div class="card-number">3</div>
+            </div>
+            
+            <div class="card" data-hint="4">
+                <div class="card-inner hidden">
+                    <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2NzcjM4cTB4OGxoZG5jN3Rha2g2Y3FsMXE3dHo3aGlzZXRnZWppcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/T7E43myNk5dq8/giphy.gif" alt="Lobster GIF">
+                    <p>The Lobster King</p>
+                </div>
+                <div class="card-number">4</div>
+            </div>
+        </div>
+
+        <div class="reveal-message hidden">
+            <h2>🎫🎫</h2>
+            <h3>2 Tickets für JORDAN PETERSON</h3>
+            <p><strong>20. Januar 2026 • Olympiahalle München</strong></p>
+            <p>Wir gehen zusammen, Bro! 💪</p>
+            <div class="ticket-links">
+                <a href="https://eticket.eventim.com/eticket/api/html/eticket/download/BxzXA3OUrJUJNV762qHdjqqzn91oF4Eluydo-DZyWA2Q_a8dvu90s6cW3Jg46HfTcKyvPnYX2bHtsdDLpUmKb8xkpgdcYME_a9C1pEzIUraMPSY4DLpxwiacLIj1uzXgSi4qPyIsxD2NkjpFI_FGgw" target="_blank">Ticket 1</a>
+                <a href="https://eticket.eventim.com/eticket/api/html/eticket/download/800I7PpxhvA-NGRo5r5wHNJgwyMMVQ8ycuIvJfMm8sLNKODrNqZwS8up6GbY3py5jtNbzlSaCXWM30c2BCfl55lvLtAR45Vm2W6NQT9YkiYGGZ3TBoJoJIwgMzn-gaXi4iWCtPnTQidwz35-ac-l0g" target="_blank">Ticket 2</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            const revealMessage = document.querySelector('.reveal-message');
+            let revealedCount = 0;
+
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    if (!card.classList.contains('revealed')) {
+                        card.classList.add('revealed');
+                        card.querySelector('.card-number').style.display = 'none';
+                        card.querySelector('.card-inner').style.display = 'flex';
+                        card.querySelector('.card-inner').classList.remove('hidden');
+                        revealedCount++;
+
+                        if (revealedCount === cards.length) {
+                            setTimeout(() => {
+                                revealMessage.style.display = 'block';
+                                launchConfetti();
+                            }, 500);
+                        }
+                    }
+                });
+            });
+
+            function launchConfetti() {
+                const container = document.createElement('div');
+                container.classList.add('confetti-container');
+                document.body.appendChild(container);
+
+                const colors = ['#e74c3c', '#f1c40f', '#2ecc71', '#3498db', '#9b59b6'];
+
+                for (let i = 0; i < 150; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                    confetti.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                    container.appendChild(confetti);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
